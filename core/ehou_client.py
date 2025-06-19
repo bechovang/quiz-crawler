@@ -1,6 +1,7 @@
-# ehou_quiz_bot/core/ehou_client.py
+# ehou_quiz_bot/core/ehou_client.py (Đã sửa lỗi)
 
 import requests
+from bs4 import BeautifulSoup, Tag
 from config import settings
 
 class EhouClient:
@@ -24,13 +25,23 @@ class EhouClient:
             'rememberusername': '1'
         }
         try:
-            # Lấy login token trước
+            print("[*] Lấy login token từ trang đăng nhập...")
             login_page_res = self.session.get(settings.EHOU_LOGIN_URL)
-            from bs4 import BeautifulSoup
+            login_page_res.raise_for_status()
             soup = BeautifulSoup(login_page_res.content, 'lxml')
-            logintoken = soup.find('input', {'name': 'logintoken'})
-            if logintoken:
-                login_payload['logintoken'] = logintoken['value']
+            
+            logintoken_input = soup.find('input', {'name': 'logintoken'})
+            
+            if isinstance(logintoken_input, Tag):
+                token_value = logintoken_input.get('value')
+                # FIX: Kiểm tra token_value là một chuỗi (str) trước khi gán
+                if token_value and isinstance(token_value, str):
+                    login_payload['logintoken'] = token_value
+                    print("[+] Đã tìm thấy login token.")
+                else:
+                    print("[-] Giá trị của login token không hợp lệ. Tiếp tục không có token.")
+            else:
+                print("[-] Không tìm thấy input cho login token. Vẫn tiếp tục thử đăng nhập...")
 
             response = self.session.post(settings.EHOU_LOGIN_URL, data=login_payload)
             response.raise_for_status()

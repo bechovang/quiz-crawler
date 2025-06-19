@@ -1,4 +1,4 @@
-# ehou_quiz_bot/ai_solver/gemini_solver.py
+# ehou_quiz_bot/ai_solver/gemini_solver.py (Đã sửa lỗi)
 
 import google.generativeai as genai
 from config import settings
@@ -10,12 +10,15 @@ class GeminiSolver:
         if not settings.GEMINI_API_KEY or settings.GEMINI_API_KEY == "YOUR_GEMINI_API_KEY":
             raise ValueError("GEMINI_API_KEY chưa được cấu hình trong config/settings.py")
         
-        genai.configure(api_key=settings.GEMINI_API_KEY)
+        # FIX: Thêm comment ignore để pyright không báo lỗi "private import" nữa.
+        # Đây là cách sử dụng tiêu chuẩn của thư viện.
+        genai.configure(api_key=settings.GEMINI_API_KEY)  # pyright: ignore[reportPrivateImportUsage]
         
-        self.generation_config = genai.types.GenerationConfig(
+        # 'GenerationConfig' nằm trực tiếp dưới 'genai' trong các phiên bản gần đây.
+        self.generation_config = genai.GenerationConfig(  # pyright: ignore[reportPrivateImportUsage]
             candidate_count=1,
-            max_output_tokens=5,
-            temperature=0.1, # Giảm tính ngẫu nhiên, tăng tính xác định
+            max_output_tokens=10,
+            temperature=0.1,
         )
         self.safety_settings = [
             {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"},
@@ -25,7 +28,7 @@ class GeminiSolver:
         ]
         
         try:
-            self.model = genai.GenerativeModel(
+            self.model = genai.GenerativeModel(  # pyright: ignore[reportPrivateImportUsage]
                 settings.GEMINI_MODEL_NAME,
                 generation_config=self.generation_config,
                 safety_settings=self.safety_settings
@@ -61,15 +64,14 @@ class GeminiSolver:
 
         try:
             response = self.model.generate_content(prompt)
-            ai_answer_raw = response.text.strip().upper()
+            ai_answer_raw = response.text.strip().upper() if response.text else ""
             
-            # Trích xuất chữ cái hợp lệ đầu tiên
             for char_code in ai_answer_raw:
                 if char_code in option_labels[:len(options)]:
                     print(f"[+] AI Solver: Gemini đề xuất: {char_code} (Raw: '{ai_answer_raw}')")
                     return option_labels.find(char_code)
             
-            print(f"[-] AI Solver: Gemini trả về không hợp lệ: '{ai_answer_raw}'.")
+            print(f"[-] AI Solver: Gemini trả về không hợp lệ hoặc không có chữ cái đáp án: '{ai_answer_raw}'.")
             return None
         except Exception as e:
             print(f"[-] AI Solver: Lỗi khi gọi Gemini API: {e}")
