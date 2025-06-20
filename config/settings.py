@@ -21,6 +21,14 @@ GEMINI_MODEL_NAME = 'gemini-1.5-flash-latest'
 # --- Automation Settings ---
 DEFAULT_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36'
 
+ # Chờ sau khi nộp một trang câu hỏi để tải trang mới
 # Độ trễ (giây) để tránh bị phát hiện hoặc bị block
-DELAY_BETWEEN_GEMINI_CALLS = 2.0  # Chờ giữa các lần gọi API để không vượt rate limit
-DELAY_AFTER_PAGE_SUBMIT = 3     # Chờ sau khi nộp một trang câu hỏi để tải trang mới
+DELAY_BETWEEN_GEMINI_CALLS = 1.5  # Thời gian chờ giữa các lần gọi API Gemini
+DELAY_AFTER_PAGE_SUBMIT = 2.5     # Thời gian chờ sau khi nộp một trang câu hỏi
+DELAY_BETWEEN_BANK_CRAWLS = 0.5   # Thời gian chờ giữa các lần cào ngân hàng câu hỏi
+# FIX: Thêm biến còn thiếu vào đây
+DELAY_BETWEEN_BANK_CRAWLSSUBMIT = 2.5     
+# Thời gian chờ sau khi nộp một trang câu hỏi
+
+
+

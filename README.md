@@ -67,3 +67,45 @@ Bot sẽ tự động chạy, giải quyết và nộp bài.
 ## Lưu ý quan trọng
 - **HTML Parser (`core/quiz_parser.py`):** Đây là phần **nhạy cảm nhất** của dự án. Cấu trúc HTML của Moodle có thể thay đổi giữa các phiên bản hoặc các theme. Nếu bot không hoạt động, khả năng cao là do các selector CSS (`div.que.multichoice`, `.qtext`, ...) không còn đúng. Bạn cần sử dụng "Inspect Element" (F12) trên trình duyệt để kiểm tra và cập nhật lại các selector trong file này cho phù hợp.
 - **Tính chính xác của AI:** AI có thể trả lời sai. Mục đích của kịch bản là kiểm thử khả năng tự động hóa, không phải để đạt điểm tuyệt đối.
+
+
+------
+
+
+# EHOU Automation Suite
+
+Bộ công cụ này được thiết kế cho mục đích **kiểm thử bảo mật (Hacker Mũ Trắng)** hệ thống EHOU (Moodle). Nó bao gồm hai kịch bản chính:
+
+1.  **Bank Builder (`bank_builder.py`):** Khai thác lỗ hổng IDOR trên trang `review.php` để quét và xây dựng một ngân hàng câu hỏi và đáp án từ các bài làm trước đó.
+2.  **Quiz Solver (`main_solver.py`):** Tự động hóa việc làm bài kiểm tra trắc nghiệm. Nó sẽ ưu tiên tìm đáp án trong ngân hàng câu hỏi đã được xây dựng. Nếu không tìm thấy, nó sẽ sử dụng AI (Google Gemini) để dự đoán câu trả lời.
+
+**CẢNH BÁO QUAN TRỌNG:**
+- **CHỈ SỬ DỤNG VỚI SỰ CHO PHÉP RÕ RÀNG VÀ BẰNG VĂN BẢN.**
+- Việc sử dụng công cụ này để gian lận là vi phạm nghiêm trọng quy chế học tập.
+- Công cụ này được cung cấp cho mục đích nghiên cứu và kiểm thử an ninh.
+
+## Cài đặt
+
+1.  **Lấy Google Gemini API Key**:
+    - Truy cập [Google AI Studio](https://aistudio.google.com/app/apikey) để tạo API Key.
+
+2.  **Cấu hình dự án**:
+    - Mở file `config/settings.py` và thay thế `YOUR_GEMINI_API_KEY` bằng API key của bạn.
+
+3.  **Cài đặt các thư viện**:
+    ```bash
+    # Tạo và kích hoạt môi trường ảo (khuyến khích)
+    python -m venv venv
+    # Windows: venv\Scripts\activate
+    # macOS/Linux: source venv/bin/activate
+
+    # Cài đặt thư viện
+    pip install -r requirements.txt
+    ```
+
+## Sử dụng
+
+### Chế độ 1: Xây dựng Ngân hàng Câu hỏi
+Chạy script `bank_builder.py` và làm theo hướng dẫn. Bạn sẽ cần cung cấp một `attempt ID` để bắt đầu quét.
+```bash
+python bank_builder.py
