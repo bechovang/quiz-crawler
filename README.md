@@ -1,3 +1,5 @@
+cào đáp án, làm thêm hàng đợi , ai agent cluster
+
 # EHOU Quiz Bot - White Hat Automation Test Suite
 
 Đây là bộ công cụ được thiết kế cho mục đích **kiểm thử bảo mật (Hacker Mũ Trắng)** hệ thống `learning.ehou.edu.vn` (Moodle). Kịch bản chính là tự động hóa việc làm bài kiểm tra trắc nghiệm bằng cách sử dụng AI (Google Gemini) để gợi ý và điền đáp án.
