@@ -1,4 +1,4 @@
-cào đáp án, làm thêm hàng đợi , ai agent cluster
+cào đáp án (done), thêm độ trễ, làm thêm hàng đợi , ai agent cluster
 
 # EHOU Quiz Bot - White Hat Automation Test Suite
 
