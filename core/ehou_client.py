@@ -1,16 +1,42 @@
 # ehou_quiz_bot/core/ehou_client.py (Phiên bản xử lý đăng nhập CAS - SSO)
 
 import requests
+import getpass  # Thư viện để nhập mật khẩu an toàn
 from bs4 import BeautifulSoup, Tag
-from urllib.parse import urlencode, quote
+from urllib.parse import quote
+
+# --- CẤU HÌNH ---
+# Điền thông tin đăng nhập vào đây để không phải nhập lại mỗi lần chạy.
+# Bỏ trống (để là "") nếu muốn chương trình hỏi khi chạy.
+HARDCODED_USERNAME = ""  # Ví dụ: "your_username"
+HARDCODED_PASSWORD = ""  # Ví dụ: "your_password"
 
 class EhouClient:
     """
     Quản lý session và quy trình đăng nhập CAS (Single Sign-On) của EHOU.
     """
-    def __init__(self, username: str, password: str):
-        self.username = username
-        self.password = password
+    def __init__(self):
+        """
+        Khởi tạo EhouClient.
+        Ưu tiên lấy thông tin đăng nhập đã được hardcode.
+        Nếu không có, sẽ yêu cầu người dùng nhập từ bàn phím.
+        """
+        # Kiểm tra xem tài khoản/mật khẩu có được hardcode không
+        if HARDCODED_USERNAME and HARDCODED_PASSWORD:
+            self.username = HARDCODED_USERNAME
+            self.password = HARDCODED_PASSWORD
+            print("[*] Sử dụng tài khoản và mật khẩu đã được cấu hình sẵn.")
+        else:
+            # Nếu không, yêu cầu nhập từ bàn phím
+            print("[*] Vui lòng nhập thông tin đăng nhập EHOU:")
+            self.username = input("Tên đăng nhập: ")
+            # Sử dụng getpass để mật khẩu không hiển thị khi gõ
+            self.password = getpass.getpass("Mật khẩu (sẽ không hiển thị khi gõ): ")
+            
+            if not self.username or not self.password:
+                print("[-] Tên đăng nhập và mật khẩu không được để trống.")
+                raise ValueError("Tên đăng nhập và mật khẩu không hợp lệ.")
+
         self.session = requests.Session()
         self.session.headers.update({
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
