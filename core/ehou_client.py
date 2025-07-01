@@ -8,8 +8,8 @@ from urllib.parse import quote
 # --- CẤU HÌNH ---
 # Điền thông tin đăng nhập vào đây để không phải nhập lại mỗi lần chạy.
 # Bỏ trống (để là "") nếu muốn chương trình hỏi khi chạy.
-HARDCODED_USERNAME = ""  # Ví dụ: "your_username"
-HARDCODED_PASSWORD = ""  # Ví dụ: "your_password"
+HARDCODED_USERNAME = "xxx"  # Ví dụ: "your_username"
+HARDCODED_PASSWORD = "xxxx"  # Ví dụ: "your_password"
 
 class EhouClient:
     """

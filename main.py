@@ -1,6 +1,5 @@
 # ehou_quiz_bot/main.py
 
-import getpass
 import time
 from config import settings
 from core.ehou_client import EhouClient
@@ -134,14 +133,25 @@ def run_bank_builder(ehou_client: EhouClient):
 def main_menu():
     """Hàm chính để hiển thị menu và điều hướng."""
     print("===== EHOU AUTOMATION SUITE =====")
-    username = input("Nhập username EHOU: ")
-    password = getpass.getpass("Nhập password EHOU: ")
     
-    ehou_client = EhouClient(username, password)
-    if not ehou_client.login():
-        print("\n[-] Đăng nhập thất bại. Kết thúc chương trình.")
+    try:
+        # Khởi tạo client. Nó sẽ tự lấy thông tin đăng nhập từ cấu hình
+        # hoặc hỏi người dùng nếu cấu hình trống.
+        ehou_client = EhouClient()
+
+        # Tiến hành đăng nhập
+        if not ehou_client.login():
+            print("\n[-] Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin. Kết thúc chương trình.")
+            return
+    except ValueError as e:
+        # Bắt lỗi nếu người dùng không nhập gì khi được hỏi
+        print(f"\n[-] Lỗi: {e}. Kết thúc chương trình.")
+        return
+    except Exception as e:
+        print(f"\n[-] Một lỗi không mong muốn đã xảy ra khi khởi tạo: {e}. Kết thúc chương trình.")
         return
 
+    # Vòng lặp menu chính
     while True:
         print("\n" + "="*40)
         print("CHỌN CHỨC NĂNG BẠN MUỐN THỰC HIỆN:")
